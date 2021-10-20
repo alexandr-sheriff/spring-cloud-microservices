@@ -1,6 +1,9 @@
 package com.alex.account.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -11,7 +14,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-@Data
 public class Account {
 
     @Id
