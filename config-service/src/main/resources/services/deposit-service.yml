@@ -13,7 +13,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   rabbitmq:
     port: 5672
-    host: 192.168.0.121
+    host: rabbitmq
     username: guest
     password: guest
     listener:
