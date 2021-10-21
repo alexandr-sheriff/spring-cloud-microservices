@@ -1,7 +1,7 @@
 package com.alex.account.service;
 
 import com.alex.account.entity.Account;
-import com.alex.account.exception.AccountNotFoundException;
+import com.alex.account.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alex.account.repository.AccountRepository;
@@ -21,7 +21,7 @@ public class AccountService {
 
     public Account getAccountById(Long accountId) {
         return accountRepository.findById(accountId)
-                .orElseThrow(() -> new AccountNotFoundException("Unable to find account with id: " + accountId));
+                .orElseThrow(() -> new ResourceNotFoundException("Unable to find account with id: " + accountId));
     }
 
 //    public Long createAccount(String name, String email, String phone, List<Long> bills) {
