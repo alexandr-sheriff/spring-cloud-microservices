@@ -24,9 +24,14 @@ public class AccountService {
                 .orElseThrow(() -> new AccountNotFoundException("Unable to find account with id: " + accountId));
     }
 
-    public Long createAccount(String name, String email, String phone, List<Long> bills) {
+//    public Long createAccount(String name, String email, String phone, List<Long> bills) {
+//        Account account = new Account(name, email, phone, OffsetDateTime.now(), bills);
+//        return accountRepository.save(account).getAccountId();
+//    }
+
+    public Account createAccount(String name, String email, String phone, List<Long> bills) {
         Account account = new Account(name, email, phone, OffsetDateTime.now(), bills);
-        return accountRepository.save(account).getAccountId();
+        return accountRepository.save(account);
     }
 
     public Account updateAccount(Long accountId, String name, String email, String phone, List<Long> bills) {
@@ -34,10 +39,14 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    public Account deleteAccount(Long accountId) {
-        Account deletedAccount = getAccountById(accountId);
+//    public Account deleteAccount(Long accountId) {
+//        Account deletedAccount = getAccountById(accountId);
+//        accountRepository.deleteById(accountId);
+//        return deletedAccount;
+//    }
+
+    public void deleteAccount(Long accountId) {
         accountRepository.deleteById(accountId);
-        return deletedAccount;
     }
 
 }
