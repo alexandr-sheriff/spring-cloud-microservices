@@ -1,6 +1,5 @@
 package com.alex.account.controller.dto;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,5 +26,5 @@ public class AccountRequestDTO {
 
     private OffsetDateTime creationDate;
 
-    private List<@Positive Long> bills;
+    private List<@NotNull @Positive Long> bills;
 }
