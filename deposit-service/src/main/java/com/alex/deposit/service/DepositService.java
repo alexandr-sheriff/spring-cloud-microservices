@@ -3,6 +3,7 @@ package com.alex.deposit.service;
 import com.alex.deposit.controller.dto.DepositResponseDTO;
 import com.alex.deposit.entity.Deposit;
 import com.alex.deposit.exception.DepositServiceException;
+import com.alex.deposit.exception.ResourceNotFoundException;
 import com.alex.deposit.repository.DepositRepository;
 import com.alex.deposit.rest.account.AccountResponseDTO;
 import com.alex.deposit.rest.account.AccountServiceClient;
@@ -43,14 +44,14 @@ public class DepositService {
 
     public DepositResponseDTO deposit(Long accountId, Long billId, BigDecimal amount) {
         if (accountId == null && billId == null) {
-            throw new DepositServiceException("Account is null and bill is null");
+            throw new ResourceNotFoundException(String.format("Unable to find account with id %s and bill with id %s", accountId, billId));
         } else if (billId != null) {
             BillResponseDTO billResponseDTO = billServiceClient.getBillById(billId);
+            AccountResponseDTO accountResponseDTO = accountServiceClient.getAccountById(billResponseDTO.getAccountId());
 
             BillRequestDTO billRequestDTO = createBillRequest(amount, billResponseDTO);
-            billServiceClient.updateBill(billId, billRequestDTO);
 
-            AccountResponseDTO accountResponseDTO = accountServiceClient.getAccountById(billResponseDTO.getAccountId());
+            billServiceClient.updateBill(billId, billRequestDTO);
             depositRepository.save(new Deposit(amount, billId, OffsetDateTime.now(), accountResponseDTO.getEmail()));
 
             return createResponse(amount, accountResponseDTO);
@@ -89,6 +90,6 @@ public class DepositService {
     private BillResponseDTO getDefaultBill(Long accountId) {
         return billServiceClient.getBillsByAccountId(accountId)
                 .stream().filter(BillResponseDTO::getIsDefault).findAny()
-                .orElseThrow(() -> new DepositServiceException("Unable to find default bill for account: " + accountId));
+                .orElseThrow(() -> new ResourceNotFoundException("Unable to find default bill for account: " + accountId));
     }
 }
