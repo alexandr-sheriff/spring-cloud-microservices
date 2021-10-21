@@ -49,4 +49,12 @@ public class AccountService {
         accountRepository.deleteById(accountId);
     }
 
+    public Account getAccountByBillsContaining(Long billId) {
+        Account accountByBillsContaining = accountRepository.getAccountByBillsContaining(billId);
+        if (accountByBillsContaining != null)
+            return accountByBillsContaining;
+        else {
+            throw new ResourceNotFoundException("Unable to find account with billId: " + billId);
+        }
+    }
 }

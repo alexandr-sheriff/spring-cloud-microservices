@@ -3,6 +3,8 @@ package com.alex.bill.service;
 import com.alex.bill.entity.Bill;
 import com.alex.bill.exception.ResourceNotFoundException;
 import com.alex.bill.repository.BillRepository;
+import com.alex.bill.rest.account.AccountResponseDTO;
+import com.alex.bill.rest.account.AccountServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,12 @@ public class BillService {
 
     private final BillRepository billRepository;
 
+    private final AccountServiceClient accountServiceClient;
+
     @Autowired
-    public BillService(BillRepository billRepository) {
+    public BillService(BillRepository billRepository, AccountServiceClient accountServiceClient) {
         this.billRepository = billRepository;
+        this.accountServiceClient = accountServiceClient;
     }
 
     public Bill getBillById(Long billId) {
@@ -30,7 +35,11 @@ public class BillService {
 //    }
 
     public Bill createBill(Long accountId, BigDecimal amount, Boolean isDefault, Boolean overdraftEnabled) {
+        AccountResponseDTO accountResponseDTO = accountServiceClient.getAccountById(accountId);
         Bill bill = new Bill(accountId, amount, isDefault, OffsetDateTime.now(), overdraftEnabled);
+        Bill save = billRepository.save(bill);
+        accountResponseDTO.getBills().add(save.getBillId());
+        accountServiceClient.updateAccountById(accountId, accountResponseDTO);
         return billRepository.save(bill);
     }
 
@@ -47,6 +56,9 @@ public class BillService {
 
     public void deleteBill(Long billId) {
         billRepository.deleteById(billId);
+        AccountResponseDTO accountResponseDTO = accountServiceClient.getAccountByBillId(billId);
+        accountResponseDTO.getBills().remove(billId);
+        accountServiceClient.updateAccountById(accountResponseDTO.getAccountId(), accountResponseDTO);
     }
 
     public List<Bill> getBillsByAccountId(Long accountId) {

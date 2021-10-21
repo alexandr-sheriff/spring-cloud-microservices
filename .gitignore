@@ -17,5 +17,3 @@ notification-service/build
 registry/build
 
 notification-service/src/main/resources/mail-props.properties
-
-*.yml

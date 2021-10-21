@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface AccountServiceClient {
 
     @RequestMapping(value = "/accounts/{accountId}", method = RequestMethod.GET)
-    AccountResponseDTO getAccountById(@PathVariable("accountId") Long accountId);
+    AccountResponseDTO getAccountById(@PathVariable Long accountId);
 }

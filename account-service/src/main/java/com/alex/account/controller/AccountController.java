@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class AccountController {
@@ -42,6 +44,7 @@ public class AccountController {
     @PutMapping("/{accountId}")
     public ResponseEntity<AccountResponseDTO> updateAccount(@PathVariable Long accountId,
                                                             @Valid @RequestBody AccountRequestDTO accountRequestDTO) {
+
         return new ResponseEntity<>(
                 new AccountResponseDTO(accountService.updateAccount(
                         accountId,
@@ -57,5 +60,13 @@ public class AccountController {
 //        return ResponseEntity.noContent().build();
         accountService.deleteAccount(accountId);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping("/bills/{billId}")
+    public ResponseEntity<AccountResponseDTO> getAccountByBillsContaining(@PathVariable Long billId) {
+        return new ResponseEntity<>(
+                new AccountResponseDTO(accountService.getAccountByBillsContaining(billId)),
+                HttpStatus.OK);
     }
 }
