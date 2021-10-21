@@ -46,8 +46,8 @@ public class DepositService {
             throw new DepositServiceException("Account is null and bill is null");
         } else if (billId != null) {
             BillResponseDTO billResponseDTO = billServiceClient.getBillById(billId);
-            BillRequestDTO billRequestDTO = createBillRequest(amount, billResponseDTO);
 
+            BillRequestDTO billRequestDTO = createBillRequest(amount, billResponseDTO);
             billServiceClient.updateBill(billId, billRequestDTO);
 
             AccountResponseDTO accountResponseDTO = accountServiceClient.getAccountById(billResponseDTO.getAccountId());
