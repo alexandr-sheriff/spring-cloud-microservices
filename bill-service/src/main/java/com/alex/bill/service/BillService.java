@@ -1,7 +1,7 @@
 package com.alex.bill.service;
 
 import com.alex.bill.entity.Bill;
-import com.alex.bill.exception.BillNotFoundException;
+import com.alex.bill.exception.ResourceNotFoundException;
 import com.alex.bill.repository.BillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +21,17 @@ public class BillService {
     }
 
     public Bill getBillById(Long billId) {
-        return billRepository.findById(billId).orElseThrow(() -> new BillNotFoundException("Unable to find account with id: " + billId));
+        return billRepository.findById(billId).orElseThrow(() -> new ResourceNotFoundException("Unable to find bill with id: " + billId));
     }
 
-    public Long createBill(Long accountId, BigDecimal amount, Boolean isDefault, Boolean overdraftEnabled) {
+//    public Long createBill(Long accountId, BigDecimal amount, Boolean isDefault, Boolean overdraftEnabled) {
+//        Bill bill = new Bill(accountId, amount, isDefault, OffsetDateTime.now(), overdraftEnabled);
+//        return billRepository.save(bill).getBillId();
+//    }
+
+    public Bill createBill(Long accountId, BigDecimal amount, Boolean isDefault, Boolean overdraftEnabled) {
         Bill bill = new Bill(accountId, amount, isDefault, OffsetDateTime.now(), overdraftEnabled);
-        return billRepository.save(bill).getBillId();
+        return billRepository.save(bill);
     }
 
     public Bill updateBill(Long billId, Long accountId, BigDecimal amount, Boolean isDefault, Boolean overdraftEnabled) {
@@ -34,10 +39,14 @@ public class BillService {
         return billRepository.save(bill);
     }
 
-    public Bill deleteBill(Long billId) {
-        Bill deletedBill = getBillById(billId);
+//    public Bill deleteBill(Long billId) {
+//        Bill deletedBill = getBillById(billId);
+//        billRepository.deleteById(billId);
+//        return deletedBill;
+//    }
+
+    public void deleteBill(Long billId) {
         billRepository.deleteById(billId);
-        return deletedBill;
     }
 
     public List<Bill> getBillsByAccountId(Long accountId) {
